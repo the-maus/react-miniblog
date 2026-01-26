@@ -26,6 +26,7 @@ export const useAuthentication = () => {
 		return () => setCanceled(true);
 	}, []);
 
+	// register
 	const createUser = async (data) => {
 		checkIfIsCanceled();
 
@@ -41,7 +42,7 @@ export const useAuthentication = () => {
 
 			await updateProfile(user, { displayName: data.displayName });
 
-            setLoading(false);
+			setLoading(false);
 
 			return user;
 		} catch (error) {
@@ -66,5 +67,40 @@ export const useAuthentication = () => {
 		setLoading(false);
 	};
 
-	return { auth, createUser, error, loading };
+	// logout
+	const logout = () => {
+		checkIfIsCanceled();
+		signOut(auth);
+	};
+
+	// login
+	const login = async (data) => {
+		checkIfIsCanceled();
+
+		setLoading(true);
+		setError(false);
+
+		try {
+			await signInWithEmailAndPassword(auth, data.email, data.password);
+			setLoading(false);
+		} catch (error) {
+			let systemErrorMessage;
+
+			if (error.message.includes("user-not-found")) {
+				systemErrorMessage = "User not found.";
+			} else if (error.message.includes("wrong-password")) {
+				systemErrorMessage = "Wrong password.";
+			} else {
+				systemErrorMessage =
+					"An error has occurred, please try again later!";
+			}
+
+			console.log(error);
+
+			setError(systemErrorMessage);
+			setLoading(false);
+		}
+	};
+
+	return { auth, createUser, error, loading, logout, login };
 };
