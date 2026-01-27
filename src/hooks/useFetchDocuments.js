@@ -27,7 +27,18 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
 			try {
 				let q;
 				// get all data from collection ordering by creation date
-				q = await query(collectionRef, orderBy("createdAt", "desc"));
+				if (search) {
+					q = await query(
+						collectionRef,
+						where("tagsArray", "array-contains", search),
+						orderBy("createdAt", "desc")
+					);
+				} else {
+					q = await query(
+						collectionRef,
+						orderBy("createdAt", "desc"),
+					);
+				}
 
 				// gets the updated docs and adds an object to documents with id that comes separated from the other data on firebase
 				await onSnapshot(q, (querySnapshot) => {

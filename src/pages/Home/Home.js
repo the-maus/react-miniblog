@@ -12,12 +12,17 @@ import PostDetail from "../../components/PostDetail";
 const Home = () => {
 	const [query, setQuery] = useState("");
 	const { documents: posts, loading, error } = useFetchDocuments("posts");
+	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
+		if (query) {
+			return navigate(`/search?q=${query}`);
+		}
 	};
 
-	console.log(posts)
+	console.log(posts);
 
 	return (
 		<div className={styles.home}>
@@ -32,7 +37,10 @@ const Home = () => {
 			</form>
 			<div>
 				{loading && <p>Loading...</p>}
-				{posts && posts.map((post) => <PostDetail key={post.id} post={post}/>)}
+				{posts &&
+					posts.map((post) => (
+						<PostDetail key={post.id} post={post} />
+					))}
 				{posts && posts.length === 0 && (
 					<div className={styles.noposts}>
 						<p>No posts found</p>
