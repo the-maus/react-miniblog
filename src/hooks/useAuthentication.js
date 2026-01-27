@@ -5,7 +5,7 @@ import {
 	updateProfile,
 	signOut,
 } from "firebase/auth";
-
+import { app } from "../firebase/config";
 import { useState, useEffect } from "react";
 
 export const useAuthentication = () => {
@@ -16,7 +16,7 @@ export const useAuthentication = () => {
 	// deal with memory leak
 	const [canceled, setCanceled] = useState(false);
 
-	const auth = getAuth();
+	const auth = getAuth(app);
 
 	function checkIfIsCanceled() {
 		if (canceled) return;
