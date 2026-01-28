@@ -67,7 +67,7 @@ const Navbar = () => {
 									isActive ? styles.active : ""
 								}
 							>
-								Dashboard
+								Dashboard ({user.displayName})
 							</NavLink>
 						</li>
 					</>
